@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const config = require('./utils/config.json');
 const express = require('express');
 const nodemailer = require('nodemailer');
+const { validateEmail, validateBody } = require('./utils/validate');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,29 +22,40 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-
-// transporter.sendMail(mailOptions, (error, info) => {
-//   if (error) {
-//     console.log(error);
-//   } else {
-//     console.log('Email sent: ' + info.response);
-//   }
-// });
-
 app.get('/', (req, res) => {
   res.send('Blank');
 });
 
 app.post('/', (req, res) => {
-  const mailOptions = {
-    from: providerEmailAddress,
-    to: providerEmailAddress,
-    subject: req.body.subject,
-    html: req.body.body,
-  };
-  console.log(mailOptions);
+  const emailCheck = validateEmail(req.body.from);
+  const bodyCheck = validateBody(req.body.body);
+  let msg = '';
 
-  res.status(200).send(req.body);
+  if (emailCheck === 'valid' && bodyCheck === 'valid') {
+    const mailOptions = {
+      from: providerEmailAddress,
+      to: providerEmailAddress,
+      subject: req.body.subject,
+      html: req.body.body,
+    };
+    // transporter.sendMail(mailOptions, (error, info) => {
+    //   if (error) {
+    //     console.log(error);
+    //   } else {
+    //     console.log('Email sent: ' + info.response);
+    //   }
+    // });
+    msg = 'Email sent successfully';
+    res.status(200).send(msg);
+  } else {
+    if (emailCheck !== 'valid') {
+      msg += emailCheck;
+    }
+    if (bodyCheck !== 'valid') {
+      msg += bodyCheck;
+    }
+    res.status(400).send(msg);
+  }
 });
 
 app.listen(port, () => {
