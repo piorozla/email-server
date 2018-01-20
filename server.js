@@ -10,7 +10,6 @@ app.use(bodyParser.json());
 
 const providerEmailAddress = config.email;
 const providerEmailAddressPassword = config.password;
-console.log(providerEmailAddress, providerEmailAddressPassword);
 
 const transporter = nodemailer.createTransport({
   host: 'poczta.o2.pl',
@@ -22,12 +21,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const mailOptions = {
-  from: 'piorozla@o2.pl',
-  to: 'piorozla@gmail.com',
-  subject: 'Sending Email using Node.js',
-  html: 'That was easy!',
-};
 
 // transporter.sendMail(mailOptions, (error, info) => {
 //   if (error) {
@@ -42,6 +35,14 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', (req, res) => {
+  const mailOptions = {
+    from: providerEmailAddress,
+    to: providerEmailAddress,
+    subject: req.body.subject,
+    html: req.body.body,
+  };
+  console.log(mailOptions);
+
   res.status(200).send(req.body);
 });
 
