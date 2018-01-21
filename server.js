@@ -6,6 +6,10 @@ const { validateEmail, validateBody } = require('./utils/validate');
 
 const app = express();
 const port = process.env.PORT || 3000;
+const emailProvider = process.env.emailProvider || config.emailProvider;
+const emailProviderPassword = process.env.emailProviderPassword || config.emailProviderPassword;
+const emailDestination = process.env.emailDestination || config.emailDestination;
+
 
 app.use(bodyParser.json());
 
@@ -16,8 +20,8 @@ const transporter = nodemailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    user: config.emailProvider,
-    pass: config.password,
+    user: emailProvider,
+    pass: emailProviderPassword,
   },
 });
 
@@ -34,8 +38,8 @@ app.post('/', (req, res) => {
 
     // configure email to send
     const mailOptions = {
-      from: config.emailProvider,
-      to: config.emailDestination,
+      from: emailProvider,
+      to: emailDestination,
       subject: req.body.subject,
       html: req.body.body,
     };
@@ -44,13 +48,14 @@ app.post('/', (req, res) => {
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log(error);
+        msg = 'Could not send the email, please try again later.';
+        res.status(400).send(msg);
       } else {
         console.log('Email sent: ' + info.response);
+        msg = 'Email sent successfully';
+        res.status(200).send(msg);        
       }
     });
-
-    msg = 'Email sent successfully';
-    res.status(200).send(msg);
   } else {
     if (emailCheck !== 'valid') {
       msg += emailCheck;
