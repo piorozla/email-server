@@ -1,9 +1,6 @@
 const bodyParser = require('body-parser');
-let config;
-console.log(process.env.emailProvider)
-if(!process.env.emailProvider) {
-  config = require('./utils/config.json');
-}
+// uncomment for local:
+// const config = require('./utils/config.json');
 const express = require('express');
 const nodemailer = require('nodemailer');
 const { validateEmail, validateBody } = require('./utils/validate');
