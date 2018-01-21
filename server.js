@@ -9,9 +9,6 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
-//get email details from config file
-const providerEmailAddress = config.email;
-const providerEmailAddressPassword = config.password;
 
 //set up email account that will send the emails
 const transporter = nodemailer.createTransport({
@@ -19,8 +16,8 @@ const transporter = nodemailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    user: providerEmailAddress,
-    pass: providerEmailAddressPassword,
+    user: config.emailProvider,
+    pass: config.password,
   },
 });
 
@@ -37,21 +34,21 @@ app.post('/', (req, res) => {
 
     // configure email to send
     const mailOptions = {
-      from: providerEmailAddress,
-      to: providerEmailAddress,
+      from: config.emailProvider,
+      to: config.emailDestination,
       subject: req.body.subject,
       html: req.body.body,
     };
 
-    //send email
-    // transporter.sendMail(mailOptions, (error, info) => {
-    //   if (error) {
-    //     console.log(error);
-    //   } else {
-    //     console.log('Email sent: ' + info.response);
-    //   }
-    // });
-    
+    // send email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+
     msg = 'Email sent successfully';
     res.status(200).send(msg);
   } else {
