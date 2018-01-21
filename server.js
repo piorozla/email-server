@@ -11,6 +11,8 @@ const emailProvider = process.env.emailProvider || config.emailProvider;
 const emailProviderPassword = process.env.emailProviderPassword || config.emailProviderPassword;
 const emailDestination = process.env.emailDestination || config.emailDestination;
 
+console.log(emailProvider, emailProviderPassword, emailDestination)
+
 
 app.use(bodyParser.json());
 
