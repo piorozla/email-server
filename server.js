@@ -43,10 +43,9 @@ app.post('/', (req, res) => {
       subject: req.body.subject,
       html: req.body.body,
     };
-    console.log('about to send an email')
     // send email
     transporter.sendMail(mailOptions, (error, info) => {
-      console.log('within transporter func')
+      console.log('sending email..')
       if (error) {
         console.log(error);
         msg = 'Could not send the email, please try again later.';
