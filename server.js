@@ -33,11 +33,8 @@ app.post('/', (req, res) => {
   const emailCheck = validateEmail(req.body.from);
   const bodyCheck = validateBody(req.body.body);
   let msg = '';
-  console.log('received request for email')
 
   if (emailCheck === 'valid' && bodyCheck === 'valid') {
-
-    console.log('validation passed');
 
     // configure email to send
     const mailOptions = {
@@ -46,9 +43,10 @@ app.post('/', (req, res) => {
       subject: req.body.subject,
       html: req.body.body,
     };
-
+    console.log('about to send an email')
     // send email
     transporter.sendMail(mailOptions, (error, info) => {
+      console.log('within transporter func')
       if (error) {
         console.log(error);
         msg = 'Could not send the email, please try again later.';
