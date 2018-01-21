@@ -11,9 +11,6 @@ const emailProvider = process.env.emailProvider || config.emailProvider;
 const emailProviderPassword = process.env.emailProviderPassword || config.emailProviderPassword;
 const emailDestination = process.env.emailDestination || config.emailDestination;
 
-console.log(emailProvider, emailProviderPassword, emailDestination)
-
-
 app.use(bodyParser.json());
 
 
@@ -36,8 +33,11 @@ app.post('/', (req, res) => {
   const emailCheck = validateEmail(req.body.from);
   const bodyCheck = validateBody(req.body.body);
   let msg = '';
+  console.log('received request for email')
 
   if (emailCheck === 'valid' && bodyCheck === 'valid') {
+
+    console.log('validation passed');
 
     // configure email to send
     const mailOptions = {
