@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser');
 let config;
+console.log(process.env.emailProvider)
 if(!process.env.emailProvider) {
   config = require('./utils/config.json');
 }
