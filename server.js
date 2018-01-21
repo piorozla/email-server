@@ -1,5 +1,8 @@
 const bodyParser = require('body-parser');
-const config = require('./utils/config.json') || '';
+let config;
+if(!process.env.emailProvider) {
+  config = require('./utils/config.json');
+}
 const express = require('express');
 const nodemailer = require('nodemailer');
 const { validateEmail, validateBody } = require('./utils/validate');
