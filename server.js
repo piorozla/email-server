@@ -16,9 +16,10 @@ app.use(bodyParser.json());
 
 //set up email account that will send the emails
 const transporter = nodemailer.createTransport({
+  service: 'Gmail',
   host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
+  port: 587,
+  secure: false,
   auth: {
     user: emailProvider,
     pass: emailProviderPassword,
@@ -48,7 +49,6 @@ app.post('/', (req, res) => {
       console.log('sending email..')
       if (error) {
         console.log(error);
-        console.log(emailProvider, emailProviderPassword)
         msg = 'Could not send the email, please try again later.';
         res.status(400).send(msg);
       } else {
