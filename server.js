@@ -48,6 +48,7 @@ app.post('/', (req, res) => {
       console.log('sending email..')
       if (error) {
         console.log(error);
+        console.log(emailProvider, emailProviderPassword)
         msg = 'Could not send the email, please try again later.';
         res.status(400).send(msg);
       } else {
