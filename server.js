@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 //set up email account that will send the emails
 const transporter = nodemailer.createTransport({
-  host: 'poczta.o2.pl',
+  host: 'smtp.gmail.com',
   port: 465,
   secure: true,
   auth: {
@@ -38,7 +38,7 @@ app.post('/', (req, res) => {
 
     // configure email to send
     const mailOptions = {
-      from: emailProvider,
+      from: req.body.body,
       to: emailDestination,
       subject: req.body.subject,
       html: req.body.body,
