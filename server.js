@@ -39,7 +39,7 @@ app.post('/', (req, res) => {
 
     // configure email to send
     const mailOptions = {
-      from: req.body.body,
+      from: req.body.from,
       to: emailDestination,
       subject: req.body.subject,
       html: req.body.body,
