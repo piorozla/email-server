@@ -60,11 +60,11 @@ app.post('/', (req, res) => {
       if (error) {
         console.log(error);
         msg = 'Could not send the email, please try again later.';
-        res.status(400).send(msg);
+        res.status(400).send({msg});
       } else {
         console.log('Email sent: ' + info.response);
         msg = 'Email sent successfully';
-        res.status(200).send(msg);
+        res.status(200).send({msg});
       }
     });
   } else {
@@ -74,7 +74,7 @@ app.post('/', (req, res) => {
     if (bodyCheck !== 'valid') {
       msg += bodyCheck;
     }
-    res.status(400).send(msg);
+    res.status(400).send({msg});
   }
 });
 
