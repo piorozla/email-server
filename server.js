@@ -8,11 +8,22 @@ const { validateEmail, validateBody } = require('./utils/validate');
 const app = express();
 const port = process.env.PORT || 3000;
 const emailProvider = process.env.emailProvider || config.emailProvider;
-const emailProviderPassword = process.env.emailProviderPassword || config.emailProviderPassword;
-const emailDestination = process.env.emailDestination || config.emailDestination;
+const emailProviderPassword =
+  process.env.emailProviderPassword || config.emailProviderPassword;
+const emailDestination =
+  process.env.emailDestination || config.emailDestination;
 
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-Requested-With,content-type'
+  );
+  next();
+});
 
 //set up email account that will send the emails
 const transporter = nodemailer.createTransport({
@@ -36,7 +47,6 @@ app.post('/', (req, res) => {
   let msg = '';
 
   if (emailCheck === 'valid' && bodyCheck === 'valid') {
-
     // configure email to send
     const mailOptions = {
       from: req.body.from,
@@ -46,7 +56,7 @@ app.post('/', (req, res) => {
     };
     // send email
     transporter.sendMail(mailOptions, (error, info) => {
-      console.log('sending email..')
+      console.log('sending email..');
       if (error) {
         console.log(error);
         msg = 'Could not send the email, please try again later.';
@@ -54,7 +64,7 @@ app.post('/', (req, res) => {
       } else {
         console.log('Email sent: ' + info.response);
         msg = 'Email sent successfully';
-        res.status(200).send(msg);        
+        res.status(200).send(msg);
       }
     });
   } else {
